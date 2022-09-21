@@ -1,0 +1,21 @@
+spring:
+
+  jpa:
+    show-sql: true
+
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/webshop_db
+    username: root
+    password: Reeves543288
+
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 3000MB
+
+  freemarker:
+    expose-request-attributes: true
