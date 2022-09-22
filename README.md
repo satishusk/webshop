@@ -19,22 +19,22 @@ mvnw spring-boot:run
 
 ## Endpoint list
 
-| Method | URL | Description |
-| ------ | --- | ----------- |
-| POST | /users | create user |
-| GET | /users | get all users |
-| GET | /users/{id} | get user with id {id} |
-| PATCH | /users/{id}/activate | activate user with id {id} |
-| PATCH | /users/{id}/deactivate | deactivate user with id {id} |
-| PUT | /users/{id} | update user with id {id} |
-| DELETE | /users/{id} | delete user with id {id} |
-| GET | /roles/{name} | get role with name {name} |
-| POST | /roles | create role |
-| DELETE | /roles/{name} | delete role with name {name} |
-| GET | /products | get all products |
-| GET | /products/{id} | get product with id {id} |
-| POST | /products | create product |
-| DELETE | /products/{id} | delete product with id {id} |
-| GET | /images/{id} | get image with id {id} |
+| Method | URL                    | Description                  |
+|--------|------------------------|------------------------------|
+| POST   | /users                 | create user                  |
+| GET    | /users                 | get all users                |
+| GET    | /users/{id}            | get user with id {id}        |
+| PATCH  | /users/{id}/activate   | activate user with id {id}   |
+| PATCH  | /users/{id}/deactivate | deactivate user with id {id} |
+| PUT    | /users/{id}            | update user with id {id}     |
+| DELETE | /users/{id}            | delete user with id {id}     |
+| GET    | /roles/{name}          | get role with name {name}    |
+| POST   | /roles                 | create role                  |
+| DELETE | /roles/{name}          | delete role with name {name} |
+| GET    | /products              | get all products             |
+| GET    | /products/{id}         | get product with id {id}     |
+| POST   | /products              | create product               |
+| DELETE | /products/{id}         | delete product with id {id}  |
+| GET    | /images/{id}           | get image with id {id}       |
 
 
