@@ -6,7 +6,6 @@ import com.kazhukov.webshop.entities.User;
 import com.kazhukov.webshop.services.PasswordService;
 import com.kazhukov.webshop.services.RoleService;
 import com.kazhukov.webshop.services.UserService;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,6 @@ class UserServiceTests {
   }
 
   @Test
-  @Ignore
   void createUserTest() {
     String path ="D:\\webshop\\src\\test\\java\\com\\kazhukov\\webshop\\resources\\0_AqFiJp2_TrUgDtKN.png";
     Image testUserAvatar = new Image(new MockMultipartFile("testName", getFileContent(path)));

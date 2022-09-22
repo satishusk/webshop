@@ -14,7 +14,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/images")
 public class ImageController {
   private final ImageServiceDefault imageServiceDefault;
 
@@ -23,7 +22,7 @@ public class ImageController {
     this.imageServiceDefault = imageServiceDefault;
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/images/{id}")
   public ResponseEntity<?> getImageById(@PathVariable("id") long id) {
     Image image = imageServiceDefault.findById(id);
     return ResponseEntity.ok()

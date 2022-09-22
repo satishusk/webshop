@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/roles")
 public class RoleController {
   private final RoleServiceDefault roleServiceDefault;
 
@@ -16,18 +15,18 @@ public class RoleController {
     this.roleServiceDefault = roleServiceDefault;
   }
 
-  @GetMapping("/{name}")
+  @GetMapping("/roles/{name}")
   public Role findByName(@PathVariable("name") String name) {
     return roleServiceDefault.findByName(name);
   }
 
-  @PostMapping("/add")
+  @PostMapping("/roles")
   public Role create(@RequestBody RoleDTO roleDto) {
     return roleServiceDefault.create(new Role(roleDto.getName()));
   }
 
-  @PostMapping("/delete")
-  public void delete(@RequestBody RoleDTO roleDto) {
-    roleServiceDefault.delete(new Role(roleDto.getName()));
+  @DeleteMapping("/roles/{name}")
+  public void delete(@PathVariable("name") String name) {
+    roleServiceDefault.delete(new Role(name));
   }
 }

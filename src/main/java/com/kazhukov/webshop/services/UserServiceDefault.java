@@ -47,10 +47,9 @@ public class UserServiceDefault implements UserService{
     return userRepository.findAll();
   }
 
-  public User delete(long id) {
+  public void delete(long id) {
     User user = getUserById(id);
     userRepository.delete(user);
-    return user;
   }
 
   public User edit(long id, UserDTO userDTO) {

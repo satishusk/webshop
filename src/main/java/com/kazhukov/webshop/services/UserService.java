@@ -13,7 +13,7 @@ public interface UserService {
   User getUserByUsername(String username);
   User getUserById(long id);
   List<User> getAll();
-  User delete(long id);
+  void delete(long id);
   User edit(long id, UserDTO userDTO);
   void activateUser(long id);
   void deactivateUser(long id);
