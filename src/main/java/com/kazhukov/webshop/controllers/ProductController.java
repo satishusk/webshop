@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
