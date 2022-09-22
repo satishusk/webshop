@@ -1,4 +1,4 @@
-# webshop
+# Webshop
 E-commerce site. Analogue of Russian Avito
 
 ## Running Webshop locally
