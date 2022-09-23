@@ -19,3 +19,7 @@ spring:
 
   freemarker:
     expose-request-attributes: true
+
+  test:
+    database:
+      replace: none

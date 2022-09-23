@@ -20,7 +20,6 @@ public class UserDTO {
   private Set<RoleDTO> roleDTOSet = new HashSet<>(Set.of(new RoleDTO("ROLE_USER")));
   //TODO: Привязаны
 
-
   public UserDTO(String username, String password, String email, String phoneNumber, MultipartFile avatarFile) {
     this.username = username;
     this.password = password;

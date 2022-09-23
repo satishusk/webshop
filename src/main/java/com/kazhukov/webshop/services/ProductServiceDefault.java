@@ -59,4 +59,9 @@ public class ProductServiceDefault implements ProductService{
         userService.getUserByUsername(principal.getName())
     );
   }
+
+  @Override
+  public long count() {
+    return productRepository.count();
+  }
 }

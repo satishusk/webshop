@@ -20,7 +20,8 @@ public class UserFactory implements Factory<UserDTO, User>{
 
   @Override
   public User generate(UserDTO userDTO) {
-    User user = new User(userDTO, roleService.findRolesInDTO(userDTO.getRoleDTOSet()));
+    User user = new User(userDTO, roleService.findRolesInDTOs(userDTO.getRoleDTOSet()));
+    user.setActive(true);
     encryptPassword(user);
     return user;
   }

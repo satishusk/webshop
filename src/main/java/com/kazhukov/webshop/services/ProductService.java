@@ -14,4 +14,5 @@ public interface ProductService {
   Product update(Product product);
   void deleteById(long id);
   Product generateProduct(ProductDTO productDto, Principal principal);
+  long count();
 }

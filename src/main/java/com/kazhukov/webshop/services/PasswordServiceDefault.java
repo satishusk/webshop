@@ -16,4 +16,8 @@ public class PasswordServiceDefault implements PasswordService{
   public String encryptPassword(String password) {
     return passwordEncoder.encode(password);
   }
+
+  public boolean matches(CharSequence rawPassword, String encodedPassword) {
+    return passwordEncoder.matches(rawPassword, encodedPassword);
+  }
 }

@@ -9,4 +9,6 @@ public interface ImageService {
   Image create(Image image);
   List<Image> createImages(List<MultipartFile> multipartFiles);
   Image findById(long id);
+
+  long count();
 }

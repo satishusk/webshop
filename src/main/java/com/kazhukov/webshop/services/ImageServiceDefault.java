@@ -32,4 +32,9 @@ public class ImageServiceDefault implements ImageService{
     public Image findById(long id) {
         return imageRepository.findById(id).orElseThrow(() -> new ImageNotFoundException(id));
     }
+
+    @Override
+    public long count() {
+        return imageRepository.count();
+    }
 }

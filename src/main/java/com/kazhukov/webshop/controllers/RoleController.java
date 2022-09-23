@@ -23,11 +23,11 @@ public class RoleController {
 
   @PostMapping("/add")
   public Role create(@RequestBody RoleDTO roleDto) {
-    return roleServiceDefault.create(new Role(roleDto.getName()));
+    return roleServiceDefault.create(roleDto);
   }
 
-  @PostMapping("/delete")
-  public void delete(@RequestBody RoleDTO roleDto) {
-    roleServiceDefault.delete(new Role(roleDto.getName()));
+  @PostMapping("/delete/{id}")
+  public void delete(@PathVariable("id") long id) {
+    roleServiceDefault.delete(id);
   }
 }

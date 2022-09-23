@@ -11,10 +11,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public interface RoleService {
-  Role create(Role role);
-  void delete(Role role);
+  Role create(RoleDTO roleDTO);
+  void delete(long id);
   Set<Role> findAll();
   Role findByName(String name);
-  Set<Role> findRolesInDTO(Set<RoleDTO> estimatedRoles);
+  Set<Role> findRolesInDTOs(Set<RoleDTO> estimatedRoles);
   boolean isPresentRoleInAuthorities(Collection<? extends GrantedAuthority> authorities, Role role);
+
 }
+
