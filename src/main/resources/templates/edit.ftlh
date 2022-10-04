@@ -14,7 +14,8 @@
   Password: <input type="password" name="password"><br><br>
   Roles: <#list roles as role>
     <div>
-      <input type="checkbox" name="roleDtoSet" id="roles[]">
+      <input type="checkbox" name="roles" id="roles[]"
+             <#if user.roles?seq_contains(role)>checked="checked"</#if> value="${role.name}">
       <label for="roles[]">${role.name}</label>
     </div>
     </#list>

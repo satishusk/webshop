@@ -11,6 +11,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(RuntimeException.class)
   public final ResponseEntity<RuntimeException> handleAllRuntimeExceptions(RuntimeException ex) {
+    ex.printStackTrace();
     return new ResponseEntity<>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

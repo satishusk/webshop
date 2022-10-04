@@ -1,6 +1,4 @@
-package com.kazhukov.webshop.exceptions;
-
-import com.kazhukov.webshop.entities.Role;
+package com.kazhukov.webshop.data.exceptions;
 
 public class EntityAlreadyExistsException extends RuntimeException{
     public EntityAlreadyExistsException(Object entity) {

@@ -1,6 +1,6 @@
 package com.kazhukov.webshop.asserts;
 
-import com.kazhukov.webshop.entities.Role;
+import com.kazhukov.webshop.data.entities.Role;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.stereotype.Component;
 

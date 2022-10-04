@@ -1,4 +1,4 @@
-package com.kazhukov.webshop.entities;
+package com.kazhukov.webshop.data.entities;
 
 import com.kazhukov.webshop.controllers.dtos.RoleDTO;
 import lombok.Data;
@@ -24,9 +24,4 @@ public class Role {
   public Role(String name) {
     this.name = name;
   }
-
-  public Role(RoleDTO roleDto) {
-    this.name = roleDto.getName();
-  }
-
 }

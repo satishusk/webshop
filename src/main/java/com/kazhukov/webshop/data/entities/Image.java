@@ -1,11 +1,10 @@
-package com.kazhukov.webshop.entities;
+package com.kazhukov.webshop.data.entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.*;
-import java.util.Arrays;
 
 @Entity
 @Data

@@ -1,18 +1,18 @@
 package com.kazhukov.webshop.services;
 
-import com.kazhukov.webshop.entities.Role;
+import com.kazhukov.webshop.controllers.dtos.UserDTO;
+import com.kazhukov.webshop.data.entities.Role;
 import com.kazhukov.webshop.controllers.dtos.RoleDTO;
-import com.kazhukov.webshop.exceptions.EntityAlreadyExistsException;
-import com.kazhukov.webshop.exceptions.EntityNotFoundException;
-import com.kazhukov.webshop.repositories.RoleRepository;
+import com.kazhukov.webshop.data.exceptions.EntityAlreadyExistsException;
+import com.kazhukov.webshop.data.exceptions.EntityNotFoundException;
+import com.kazhukov.webshop.data.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.RoleNotFoundException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import javax.swing.text.html.Option;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,9 +25,10 @@ public class RoleServiceDefault implements RoleService{
   }
 
   @Override
-  public Role create(RoleDTO roleDTO) {
-    Role role = new Role(roleDTO);
-    if (roleIsPresent(role)) throw new EntityAlreadyExistsException(role);
+  public Role create(Role role) {
+    if (roleIsPresent(role)) {
+      throw new EntityAlreadyExistsException(role);
+    }
     return roleRepository.save(role);
   }
 
@@ -46,21 +47,25 @@ public class RoleServiceDefault implements RoleService{
   }
 
   @Override
-  public Role findByName(String name) {
+  public Optional<Role> findByName(String name) {
     Role role = roleRepository.findByName(name);
-    if (role == null) throw new EntityNotFoundException(name);
-    return role;
-  }
-
-  @Override
-  public Set<Role> findRolesInDTOs(Set<RoleDTO> estimatedRoles) {
-    return estimatedRoles.stream()
-        .map(roleDTO -> findByName(roleDTO.getName()))
-        .collect(Collectors.toSet());
+    if (role == null) {
+      return Optional.empty();
+    } else {
+      return Optional.of(role);
+    }
   }
 
   @Override
   public boolean isPresentRoleInAuthorities(Collection<? extends GrantedAuthority> authorities, Role role) {
     return authorities.stream().anyMatch(ga -> ga.getAuthority().equals(role.getName()));
+  }
+
+  @Override
+  public Set<Role> persistExistsRoles(Set<Role> roles) {
+    return roles.stream()
+      .map(role -> findByName(role.getName()).orElse(null))
+      .filter(Objects::nonNull)
+      .collect(Collectors.toSet());
   }
 }

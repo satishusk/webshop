@@ -34,7 +34,7 @@
     Description: <input type="text" name="description"><br><br>
     Price: <input type="number" name="price"><br><br>
     City: <input type="text" name="city"><br><br>
-    Images: <input type=file name="multipartFiles" multiple="multiple"><br><br>
+    Images: <input type=file name="imageFiles" multiple="multiple"><br><br>
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Add product"/>
   </form>

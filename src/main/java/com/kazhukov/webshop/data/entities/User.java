@@ -1,7 +1,7 @@
-package com.kazhukov.webshop.entities;
+package com.kazhukov.webshop.data.entities;
 
+import com.kazhukov.webshop.controllers.dtos.RoleDTO;
 import com.kazhukov.webshop.controllers.dtos.UserDTO;
-import com.kazhukov.webshop.exceptions.TransientEntityException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,8 +26,8 @@ public class User {
   @Column(name = "username")
   private String username;
 
-  @Column(name = "password", length = 1024)
-  private String password;
+  @Column(name = "password_hash", length = 1024)
+  private String passwordHash;
 
   @Column(name = "email")
   private String email;
@@ -42,7 +42,7 @@ public class User {
   private String phoneNumber;
 
   @Column(name = "active")
-  private boolean active;
+  private boolean active = true;
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "image_id")
@@ -51,27 +51,22 @@ public class User {
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id")
   private List<Product> products;
 
-  public User(UserDTO userDto, Set<Role> roles) {
-    this.username = userDto.getUsername();
-    this.password = userDto.getPassword();
-    this.email = userDto.getEmail();
-    this.phoneNumber = userDto.getPhoneNumber();
-    this.avatar = new Image(userDto.getAvatarFile());
-    this.roles = requiresNotTransientRoles(roles);
+  public User(UserDTO userDTO, Set<Role> roles) {
+    this.username = userDTO.getUsername();
+    this.passwordHash = userDTO.getPassword();
+    this.email = userDTO.getEmail();
+    this.roles = roles;
+    this.phoneNumber = userDTO.getPhoneNumber();
+    this.avatar = new Image(userDTO.getAvatarFile());
   }
 
-  private Set<Role> requiresNotTransientRoles(Set<Role> roles) {
-    Set<Role> supposedlyTransientRoles = findAnyTransientRole(roles);
-    if (supposedlyTransientRoles.size() != 0) {
-      throw new TransientEntityException(supposedlyTransientRoles);
-    }
-    return roles;
-  }
-
-  private Set<Role> findAnyTransientRole(Set<Role> roles) {
-    return roles.stream()
-        .filter(role -> role.getId() == null)
-        .collect(Collectors.toSet());
+  public void update(User user) {
+    this.username = user.getUsername();
+    this.passwordHash = user.getPasswordHash();
+    this.email = user.getEmail();
+    this.phoneNumber = user.getPhoneNumber();
+    this.avatar = user.getAvatar();
+    this.roles = user.getRoles();
   }
 
   @Override
@@ -79,7 +74,7 @@ public class User {
     return "User{" +
         "id=" + id +
         ", username='" + username + '\'' +
-        ", password='" + password + '\'' +
+        ", passwordHash='" + passwordHash + '\'' +
         ", email='" + email + '\'' +
         ", roles=" + roles +
         ", phoneNumber='" + phoneNumber + '\'' +

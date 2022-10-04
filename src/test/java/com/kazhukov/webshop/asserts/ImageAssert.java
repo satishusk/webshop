@@ -1,6 +1,6 @@
 package com.kazhukov.webshop.asserts;
 
-import com.kazhukov.webshop.entities.Image;
+import com.kazhukov.webshop.data.entities.Image;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

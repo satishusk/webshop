@@ -1,4 +1,4 @@
-package com.kazhukov.webshop.exceptions;
+package com.kazhukov.webshop.data.exceptions;
 
 public class EntityNotFoundException extends RuntimeException{
   public EntityNotFoundException(String username) {

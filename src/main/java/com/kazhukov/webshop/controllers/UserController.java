@@ -1,36 +1,49 @@
 package com.kazhukov.webshop.controllers;
 
-import com.kazhukov.webshop.entities.User;
+import com.kazhukov.webshop.controllers.dtos.RoleDTO;
+import com.kazhukov.webshop.data.entities.Role;
+import com.kazhukov.webshop.data.entities.User;
 import com.kazhukov.webshop.controllers.dtos.UserDTO;
-import com.kazhukov.webshop.exceptions.EntityAlreadyExistsException;
+import com.kazhukov.webshop.data.exceptions.EntityAlreadyExistsException;
 import com.kazhukov.webshop.services.RoleService;
-import com.kazhukov.webshop.services.RoleServiceDefault;
 import com.kazhukov.webshop.services.UserService;
-import com.kazhukov.webshop.services.UserServiceDefault;
 import com.kazhukov.webshop.services.factories.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.Set;
 
 @Controller
+@Transactional
 @RequestMapping("/users")
 public class UserController {
   private final UserService userService;
   private final RoleService roleService;
+  private final UserFactory userFactory;
 
   @Autowired
-  public UserController(UserService userService, RoleService roleService) {
+  public UserController(UserService userService, RoleService roleService, UserFactory userFactory) {
     this.userService = userService;
     this.roleService = roleService;
+    this.userFactory = userFactory;
   }
 
   @GetMapping("/login")
-  public String loginPage() {
+  public String loginPage(HttpSession session, Model model) {
+    if (session != null) {
+      Exception exception = (Exception) session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
+      if (exception != null) {
+        model.addAttribute("errorMessage", exception.getMessage());
+      }
+    }
     return "login";
   }
 
@@ -42,7 +55,7 @@ public class UserController {
   @PostMapping("/registration")
   public String registration(UserDTO userDto, Model model) {
     try {
-      userService.create(userDto);
+      userService.create(userFactory.generate(userDto));
       return "redirect:/users/login";
     } catch (EntityAlreadyExistsException e) {
       String errorMessage = "User with username: " + userDto.getUsername() + " already exists!";
@@ -61,8 +74,9 @@ public class UserController {
 
   @PostMapping("/edit")
   public User editCurrent(UserDTO userDto, Principal principal) {
+    User actualUser = userFactory.generate(userDto);
     User userByUsername = userService.getUserByUsername(principal.getName());
-    return userService.edit(userByUsername.getId(), userDto);
+    return userService.edit(userByUsername.getId(), actualUser);
   }
 
   @GetMapping("/admin")
@@ -98,8 +112,9 @@ public class UserController {
   }
 
   @PostMapping("/admin/edit/{id}")
-  public String edit(@PathVariable("id") long id, @RequestBody UserDTO userDto) {
-    userService.edit(id, userDto);
+  public String edit(@PathVariable("id") long id, UserDTO userDto, @RequestParam(value = "roles") Set<RoleDTO> roles) {
+    User actualUser = userFactory.generate(userDto, roles);
+    userService.edit(id, actualUser);
     return "redirect:/users/admin";
   }
 

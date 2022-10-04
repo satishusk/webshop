@@ -12,6 +12,8 @@
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Login">
 </form>
+<br>
+<#if errorMessage??><div style="color: red">${errorMessage}</div><br></#if>
 <a href="/users/registration">Registration</a>
 </body>
 </html>

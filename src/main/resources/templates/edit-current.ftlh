@@ -12,12 +12,6 @@
   Avatar: <input type="file" name="avatarFile" value="${user.avatar}"><br><br>
   Email: <input type="email" name="email" value="${user.email}"><br><br>
   Password: <input type="password" name="password"><br><br>
-  Roles: <#list roles as role>
-    <div>
-      <input type="checkbox" name="roleDtoSet" id="roles[]">
-      <label for="roles[]">${role.name}</label>
-    </div>
-    </#list>
   <input type="hidden" name="_csrf" value="${_csrf.token}">
   <input type="submit" value="Edit">
 </form>
