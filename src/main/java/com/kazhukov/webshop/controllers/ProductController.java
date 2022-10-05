@@ -1,55 +1,70 @@
 package com.kazhukov.webshop.controllers;
 
-import com.kazhukov.webshop.entities.Product;
-import com.kazhukov.webshop.entities.Role;
-import com.kazhukov.webshop.entities.User;
+import com.kazhukov.webshop.data.entities.Product;
+import com.kazhukov.webshop.data.entities.Role;
+import com.kazhukov.webshop.data.entities.User;
 import com.kazhukov.webshop.controllers.dtos.ProductDTO;
+import com.kazhukov.webshop.data.exceptions.EntityNotFoundException;
 import com.kazhukov.webshop.security.authentication.GrantedAuthentication;
-import com.kazhukov.webshop.services.ProductServiceDefault;
-import com.kazhukov.webshop.services.RoleServiceDefault;
+import com.kazhukov.webshop.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
-@RestController
+
+@Controller
+@Transactional
 @RequiredArgsConstructor
 public class ProductController {
-  private final ProductServiceDefault productServiceDefault;
-  private final RoleServiceDefault roleServiceDefault;
+  private final ProductService productService;
+  private final RoleService roleService;
+  private final UserService userService;
 
-  @GetMapping("/products")
-  public List<Product> findAll(GrantedAuthentication authentication) {
-    return productServiceDefault.findAll();
+
+  @GetMapping
+  public String findAll(Model model, GrantedAuthentication authentication) {
+    model.addAttribute("products", productService.findAll());
+    model.addAttribute("authentication", authentication);
+    model.addAttribute("isAdmin", isAdminAuthenticate(authentication));
+    return "products";
   }
 
   private boolean isAdminAuthenticate(GrantedAuthentication authentication) {
-    Role adminRole = roleServiceDefault.findByName("ROLE_ADMIN");
-    return roleServiceDefault.isPresentRoleInAuthorities(authentication.getAuthorities(), adminRole);
+    Role adminRole = roleService.findByName("ROLE_ADMIN")
+      .orElseThrow(() -> new EntityNotFoundException("ROLE_ADMIN not found!"));
+    return roleService.isPresentRoleInAuthorities(authentication.getAuthorities(), adminRole);
   }
 
-  @GetMapping("/products/{id}")
-  public Product findById(@PathVariable("id") long id, Model model) {
-    return productServiceDefault.findById(id);
+
+  @GetMapping("/{id}")
+  public String findById(@PathVariable("id") long id, Model model) {
+    Product product = productService.findById(id);
+    model.addAttribute("product", product);
+    model.addAttribute("images", product.getImages());
+    return "product-info";
   }
 
-  @PostMapping("/products")
-  public Product create(@ModelAttribute ProductDTO productDto, Principal principal) {
-    return productServiceDefault.create(productServiceDefault.generateProduct(productDto, principal));
-//    return "redirect:/products";
+  @PostMapping("/add")
+  public String create(@ModelAttribute ProductDTO productDto, Principal principal) {
+    Product product = new Product(productDto, userService.getUserByUsername(principal.getName()));
+    productService.create(product);
+    return "redirect:/products";
   }
 
-  @DeleteMapping("/products/{id}")
-  public void delete(@PathVariable("id") long id, Principal principal) {
-    Product productById = productServiceDefault.findById(id);
+  @PostMapping("/delete/{id}")
+  public String delete(@PathVariable("id") long id, Principal principal) {
+    Product productById = productService.findById(id);
     User owner = productById.getUser();
     if (!owner.getUsername().equals(principal.getName())) {
       throw new IllegalArgumentException("Attempt to remove a product by a user who does not own it ");
     }
-    productServiceDefault.deleteById(id);
-//    return "redirect:/products";
+
+    productService.deleteById(id);
+    return "redirect:/products";
   }
 }

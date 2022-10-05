@@ -1,19 +1,21 @@
 package com.kazhukov.webshop.controllers;
 
-import com.kazhukov.webshop.entities.Image;
+import com.kazhukov.webshop.data.entities.Image;
 
 import com.kazhukov.webshop.services.ImageServiceDefault;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
 @RestController
+@Transactional
+@RequestMapping("/images")
 public class ImageController {
   private final ImageServiceDefault imageServiceDefault;
 

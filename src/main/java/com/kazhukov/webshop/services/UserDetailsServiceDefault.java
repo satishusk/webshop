@@ -1,7 +1,7 @@
 package com.kazhukov.webshop.services;
 
-import com.kazhukov.webshop.entities.Role;
-import com.kazhukov.webshop.entities.User;
+import com.kazhukov.webshop.data.entities.Role;
+import com.kazhukov.webshop.data.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +29,7 @@ public class UserDetailsServiceDefault implements UserDetailsService {
     User userByUsername = userService.getUserByUsername(username);
     return new org.springframework.security.core.userdetails.User(
       username,
-      userByUsername.getPassword(),
+      userByUsername.getPasswordHash(),
       userByUsername.isActive(),
       true,
       true,

@@ -1,4 +1,4 @@
-package com.kazhukov.webshop.exceptions;
+package com.kazhukov.webshop.data.exceptions;
 
 public class ImageNotFoundException extends RuntimeException{
   public ImageNotFoundException(long id) {

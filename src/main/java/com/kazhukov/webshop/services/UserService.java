@@ -1,20 +1,19 @@
 package com.kazhukov.webshop.services;
 
 import com.kazhukov.webshop.controllers.dtos.UserDTO;
-import com.kazhukov.webshop.entities.User;
-import com.kazhukov.webshop.exceptions.EntityAlreadyExistsException;
-import com.kazhukov.webshop.exceptions.UserNotFoundException;
+import com.kazhukov.webshop.data.entities.User;
 
 import java.util.List;
 
 public interface UserService {
-  User create(UserDTO userDTO);
+  User create(User user);
   boolean userByUsernameIsPresent(String username);
   User getUserByUsername(String username);
   User getUserById(long id);
   List<User> getAll();
   void delete(long id);
-  User edit(long id, UserDTO userDTO);
+  User edit(long id, User user);
   void activateUser(long id);
   void deactivateUser(long id);
+  long count();
 }

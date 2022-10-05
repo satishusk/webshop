@@ -1,6 +1,6 @@
-package com.kazhukov.webshop.repositories;
+package com.kazhukov.webshop.data.repositories;
 
-import com.kazhukov.webshop.entities.Image;
+import com.kazhukov.webshop.data.entities.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

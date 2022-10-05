@@ -1,12 +1,16 @@
 package com.kazhukov.webshop.controllers;
 
-import com.kazhukov.webshop.entities.Role;
+import com.kazhukov.webshop.data.entities.Role;
 import com.kazhukov.webshop.controllers.dtos.RoleDTO;
 import com.kazhukov.webshop.services.RoleServiceDefault;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+
+@Transactional
+@RequestMapping("/roles")
 public class RoleController {
   private final RoleServiceDefault roleServiceDefault;
 
@@ -17,7 +21,7 @@ public class RoleController {
 
   @GetMapping("/roles/{name}")
   public Role findByName(@PathVariable("name") String name) {
-    return roleServiceDefault.findByName(name);
+    return roleServiceDefault.findByName(name).orElse(null);
   }
 
   @PostMapping("/roles")
@@ -25,8 +29,9 @@ public class RoleController {
     return roleServiceDefault.create(new Role(roleDto.getName()));
   }
 
-  @DeleteMapping("/roles/{name}")
-  public void delete(@PathVariable("name") String name) {
-    roleServiceDefault.delete(new Role(name));
+
+  @PostMapping("/delete/{id}")
+  public void delete(@PathVariable("id") long id) {
+    roleServiceDefault.delete(id);
   }
 }

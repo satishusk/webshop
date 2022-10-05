@@ -1,9 +1,9 @@
-package com.kazhukov.webshop.entities;
+package com.kazhukov.webshop.data.entities;
 
 import com.kazhukov.webshop.controllers.dtos.ProductDTO;
-import com.kazhukov.webshop.exceptions.TransientEntityException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,42 +35,32 @@ public class Product {
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")
   private List<Image> images;
 
-  @Column(name = "preview_image_id")
-  private long previewImageId;
-
   @Column(name = "date_of_created")
   private LocalDateTime dateOfCreated;
 
-  @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private User user;
 
-  public Product(ProductDTO productDto, List<Image> images, User productOwner) {
-    this.title = productDto.getTitle();
-    this.description = productDto.getDescription();
-    this.price = productDto.getPrice();
-    this.city = productDto.getCity();
-    this.images = requiresNotTransientImages(establishReferenceToProduct(images));
-    this.previewImageId = images.get(0).getId();
+  public Product(ProductDTO productDTO, User productOwner) {
+    this.title = productDTO.getTitle();
+    this.description = productDTO.getDescription();
+    this.price = productDTO.getPrice();
+    this.city = productDTO.getCity();
+    this.images = convertToImages(productDTO.getImageFiles());
     this.dateOfCreated = LocalDateTime.now();
     this.user = productOwner;
   }
 
-  private List<Image> requiresNotTransientImages(List<Image> images) {
-    List<Image> supposedlyTransientImages = findAnyTransientImage(images);
-    if (supposedlyTransientImages.size() != 0) {
-      throw new TransientEntityException(supposedlyTransientImages);
-    }
-    return images;
+  private List<Image> convertToImages(List<? extends MultipartFile> imageFiles) {
+    return imageFiles.stream().map(Image::new).toList();
   }
 
-  private List<Image> findAnyTransientImage(List<Image> images) {
-    return images.stream()
-        .filter(image -> image.getId() == null)
-        .toList();
-  }
-
-  private List<Image> establishReferenceToProduct(List<Image> images) {
-    return images.stream().peek(image -> image.setProduct(this)).toList();
+  public void update(Product product) {
+    this.title = product.getTitle();
+    this.description = product.getDescription();
+    this.price = product.getPrice();
+    this.city = product.getCity();
+    this.images = product.getImages();
   }
 
   @Override
@@ -81,7 +71,6 @@ public class Product {
         ", description='" + description + '\'' +
         ", price=" + price +
         ", city='" + city + '\'' +
-        ", previewImageId=" + previewImageId +
         ", dateOfCreated=" + dateOfCreated +
         '}';
   }
